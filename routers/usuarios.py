@@ -14,7 +14,7 @@ router = APIRouter(
 
 @router.post("/")
 def registrar_usuario(usuario: Usuario):
-    crear_usuario(usuario.username, usuario.password)
+    crear_usuario(usuario.username, usuario.password, usuario.role)
     return {"mensaje": "Usuario registrado exitosamente"}
 
 @router.get("/")
@@ -27,6 +27,7 @@ def listar_usuarios():
         resultado.append({
             "id": usuario[0],
             "username": usuario[1],
+            "role": usuario[2]
         })
 
     return resultado
@@ -40,6 +41,7 @@ def obtener_usuario(id: int):
     return {
         "id": usuario[0],
         "username": usuario[1],
+        "role": usuario[2]
     }
 
 @router.put("/usuarios/{id}")

@@ -14,14 +14,15 @@ def crear_tabla():
     CREATE TABLE IF NOT EXISTS usuarios (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT UNIQUE NOT NULL,
-        password TEXT NOT NULL
+        password TEXT NOT NULL,
+        role TEXT NOT NULL DEFAULT 'user'
     )
     """)
 
     conexion.commit()
     conexion.close()
 
-def crear_usuario(username, password):
+def crear_usuario(username, password, role='user'):
     conexion = None
     try:
         usuario = obtener_usuario_username(username)
@@ -35,9 +36,9 @@ def crear_usuario(username, password):
         cursor = conexion.cursor()
 
         cursor.execute("""
-        INSERT INTO usuarios (username, password)
-        VALUES (?,?)
-        """, (username, hash_password(password)))
+        INSERT INTO usuarios (username, password, role)
+        VALUES (?, ?, ?)
+        """, (username, hash_password(password), role))
 
         conexion.commit()
     except sqlite3.IntegrityError:
@@ -54,7 +55,7 @@ def obtener_usuarios():
     cursor = conexion.cursor()
 
     cursor.execute("""
-    SELECT id, username 
+    SELECT id, username, role
     FROM usuarios
      """)
 
