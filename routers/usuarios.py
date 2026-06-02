@@ -21,7 +21,7 @@ def listar_usuarios():
     for usuario in usuarios:
         resultado.append({
             "id": usuario[0],
-            "username": usuario[1]
+            "username": usuario[1],
         })
 
     return resultado

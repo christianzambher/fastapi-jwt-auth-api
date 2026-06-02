@@ -7,9 +7,7 @@ pwd_context = CryptContext(
 )
 
 def hash_password(password: str):
-    password_bytes = hashlib.sha256(password.encode('utf-8')).hexdigest().encode('utf-8')
-    return pwd_context.hash(password_bytes)
+    return pwd_context.hash(password)
 
 def verify_password(plain_password: str, hashed_password: str):
-    plain_password_bytes = hashlib.sha256(plain_password.encode('utf-8')).hexdigest().encode('utf-8')
-    return pwd_context.verify(plain_password_bytes, hashed_password)
+    return pwd_context.verify(plain_password, hashed_password)
