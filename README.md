@@ -18,6 +18,11 @@ Proyecto educativo desarrollado con FastAPI para comprender autenticación basad
 - Expiración de tokens
 - Protección de rutas
 - Obtencion de usaurio autenticado
+- Registro de usuarios
+- Login con JWT
+- Rutas protegidas
+- Hash de contraseñas con bcrypt
+- CRUD completo de usuarios
 
 ## Endpoints
 

@@ -1,6 +1,11 @@
 from fastapi import FastAPI, APIRouter
 from models.usuario import Usuario
-from database import crear_usuario, obtener_usuarios
+from database import (
+    crear_usuario, 
+    obtener_usuarios, 
+    obtener_usuario_id, 
+    actualizar_usuario as actualizar_usuario_db, 
+    eliminar_usuario as eliminar_usuario_db)
 
 router = APIRouter(
     prefix="/usuarios",
@@ -25,3 +30,42 @@ def listar_usuarios():
         })
 
     return resultado
+
+@router.get("/{id}")
+def obtener_usuario(id: int):
+    usuario = obtener_usuario_id(id)
+
+    if not usuario:
+        return usuario
+    return {
+        "id": usuario[0],
+        "username": usuario[1],
+    }
+
+@router.put("/usuarios/{id}")
+def actualizar_usuario(id: int, usuario: Usuario):
+    filas = actualizar_usuario_db(id, usuario.username)
+
+    if filas == 0:
+        raise HTTPException(
+            status_code=404,
+            detail="Usuario no encontrado"
+        )
+
+    return {
+        "mensaje": "Usuario actualizado"
+    }
+
+@router.delete("/usuarios/{id}")
+def eliminar_usuario(id: int):
+    filas = eliminar_usuario_db(id)
+
+    if filas == 0:
+        raise HTTPException(
+            status_code=404,
+            detail="Usuario no encontrado"
+        )
+
+    return {
+        "mensaje": "Usuario eliminado"
+    }

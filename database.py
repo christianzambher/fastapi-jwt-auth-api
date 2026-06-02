@@ -80,3 +80,82 @@ def obtener_usuario_username(username):
     conexion.close()
 
     return usuario
+
+def obtener_usuario_id(id):
+    conexion = None
+    try:
+        conexion = conectar()
+        cursor = conexion.cursor()
+
+        cursor.execute("""
+        SELECT id, username
+        FROM usuarios
+        WHERE id = ? 
+        """, (id, ))
+
+        if not cursor.fetchone():
+            raise HTTPException(
+                status_code=404,
+                detail="Usuario no encontrado"
+            )
+
+        usuario = cursor.fetchone()
+        conexion.close()
+    except sqlite3.IntegrityError:
+        raise HTTPException(
+                status_code=404,
+                detail="Usuario no encontrado"
+            )
+    return usuario
+
+
+def actualizar_usuario(id, username):
+    conexion = None
+    try:
+        conexion = conectar()
+        cursor = conexion.cursor()
+
+        cursor.execute("""
+        UPDATE usuarios
+        SET username = ?
+        WHERE id = ? 
+        """, (username, id))
+
+        conexion.commit()
+
+        filas = cursor.rowcount
+
+        return filas
+    except sqlite3.IntegrityError:
+        raise HTTPException(
+            status_code=404,
+            detail="Usuario no encontrado"
+        )
+    finally:
+        if conexion:
+            conexion.close()
+
+def eliminar_usuario(id):
+    conexion = None
+    try:
+        conexion = conectar()
+        cursor = conexion.cursor()
+
+        cursor.execute("""
+        DELETE FROM usuarios
+        WHERE id = ? 
+        """, (id, ))
+
+        conexion.commit()
+
+        filas = cursor.rowcount
+
+        return filas
+    except sqlite3.IntegrityError:
+        raise HTTPException(
+            status_code=404,
+            detail="Usuario no encontrado"
+        )
+    finally:
+        if conexion:
+            conexion.close()
