@@ -3,6 +3,7 @@ from auth import crear_token, validar_token
 from fastapi.security import OAuth2PasswordBearer
 from models.login import Login
 from database import obtener_usuario_username
+from security import verify_password
 
 oauth2_scheme = OAuth2PasswordBearer(
     tokenUrl="login"
@@ -23,7 +24,7 @@ def login(datos: Login):
             detail="Credenciales incorrectas"
         )
 
-    if usuario[2] != datos.password:
+    if not verify_password(datos.password, usuario[2]):
         raise HTTPException(
             status_code=401,
             detail="Credenciales incorrectas"

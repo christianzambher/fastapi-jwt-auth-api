@@ -1,5 +1,6 @@
 import sqlite3
 from fastapi import HTTPException
+from security import hash_password 
 
 def conectar():
     return sqlite3.connect('database/usuarios.db')
@@ -36,7 +37,7 @@ def crear_usuario(username, password):
         cursor.execute("""
         INSERT INTO usuarios (username, password)
         VALUES (?,?)
-        """, (username, password))
+        """, (username, hash_password(password)))
 
         conexion.commit()
     except sqlite3.IntegrityError:
