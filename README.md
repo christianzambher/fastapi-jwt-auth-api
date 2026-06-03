@@ -292,6 +292,12 @@ password=123456
 
 ---
 
-## Autor
+# Demo
 
-Christian Zambrano
+API desplegada en Render:
+
+[![Deploy](https://img.shields.io/badge/Render-Live-success)](https://fastapi-jwt-auth-api.onrender.com)
+
+Documentación Swagger:
+
+[![Deploy](https://img.shields.io/badge/Render-Live-success)](https://fastapi-jwt-auth-api.onrender.com/docs)
