@@ -48,18 +48,16 @@ def login(datos: Login):
     return {"access_token": token}
 
 @auth_router.get("/perfil")
-# def perfil(token: str = Depends(oauth2_scheme)):
-#     payload = validar_token(token)
+def perfil(token: str = Depends(oauth2_scheme)):
+    payload = validar_token(token)
 
-#     if not payload:
-#         raise HTTPException(
-#             status_code=401,
-#             detail="Token inválido"
-#         )
+    if not payload:
+        raise HTTPException(
+            status_code=401,
+            detail="Token inválido"
+        )
 
-#     return {"usuario": payload["sub"], "role": payload["role"]}
-def perfil(usuario=Depends(obtener_usuario_actual)):
-    return usuario
+    return {"usuario": payload["sub"], "role": payload["role"]}
 
 def verificar_admin(
     usuario=Depends(obtener_usuario_actual)

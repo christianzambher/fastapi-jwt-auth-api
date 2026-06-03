@@ -1,13 +1,11 @@
 from jose import jwt
 from datetime import datetime, timedelta
 from jose import JWTError
-
-SECRET_KEY = "mi_clave_super_secreta"
-ALGORITHM = "HS256"
+from config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 
 def crear_token(datos: dict):
     datos_copia = datos.copy()
-    expiracion = datetime.utcnow() + timedelta(minutes=30)
+    expiracion = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
 
     datos_copia.update({"exp": expiracion})
 

@@ -1,4 +1,5 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, Depends, HTTPException
+from routers.auth import verificar_admin, obtener_usuario_actual
 from models.usuario import Usuario
 from database import (
     crear_usuario, 
