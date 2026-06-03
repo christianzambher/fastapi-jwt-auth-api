@@ -59,7 +59,7 @@ def actualizar_usuario(id: int, usuario: Usuario):
     }
 
 @router.delete("/usuarios/{id}")
-def eliminar_usuario(id: int):
+def eliminar_usuario(id: int, admin=Depends(verificar_admin)):
     filas = eliminar_usuario_db(id)
 
     if filas == 0:

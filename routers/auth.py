@@ -14,6 +14,19 @@ auth_router = APIRouter(
     tags=["Autenticación"]
 )
 
+def obtener_usuario_actual(
+    token: str = Depends(oauth2_scheme)
+):
+    payload = validar_token(token)
+
+    if not payload:
+        raise HTTPException(
+            status_code=401,
+            detail="Token inválido"
+        )
+
+    return payload
+
 @auth_router.post("/login")
 def login(datos: Login):
     usuario = obtener_usuario_username(datos.username)
@@ -30,18 +43,31 @@ def login(datos: Login):
             detail="Credenciales incorrectas"
         )
 
-    token = crear_token({"sub": usuario[1]})
+    token = crear_token({"sub": usuario[1], "role": usuario[3]})
 
     return {"access_token": token}
 
 @auth_router.get("/perfil")
-def perfil(token: str = Depends(oauth2_scheme)):
-    payload = validar_token(token)
+# def perfil(token: str = Depends(oauth2_scheme)):
+#     payload = validar_token(token)
 
-    if not payload:
+#     if not payload:
+#         raise HTTPException(
+#             status_code=401,
+#             detail="Token inválido"
+#         )
+
+#     return {"usuario": payload["sub"], "role": payload["role"]}
+def perfil(usuario=Depends(obtener_usuario_actual)):
+    return usuario
+
+def verificar_admin(
+    usuario=Depends(obtener_usuario_actual)
+):
+    if usuario["role"] != "admin":
         raise HTTPException(
-            status_code=401,
-            detail="Token inválido"
+            status_code=403,
+            detail="Acceso denegado"
         )
 
-    return {"usuario": payload["sub"]}
+    return usuario
