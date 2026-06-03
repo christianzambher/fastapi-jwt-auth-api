@@ -44,13 +44,16 @@ fastapi-jwt-auth-api/
 │   ├── auth.py
 │   └── usuarios.py
 │
+├── .env
+├── .env.example
+├── .gitignore
+│
 ├── auth.py
 ├── config.py
 ├── database.py
-├── security.py
 ├── main.py
+├── security.py
 │
-├── .env.example
 ├── requirements.txt
 └── README.md
 ```
@@ -230,6 +233,15 @@ Los tokens incluyen:
 
 ---
 
+## Roles Disponibles
+
+| Rol | Permisos |
+|-------|----------|
+| user | Acceso a endpoints públicos y perfil |
+| admin | Puede eliminar usuarios y acceder a recursos administrativos |
+
+---
+
 ## Endpoints
 
 | Método | Endpoint | Descripción |
@@ -241,6 +253,28 @@ Los tokens incluyen:
 | DELETE | /usuarios/{id} | Eliminar usuario (admin) |
 | POST | /auth/login | Generar token |
 | GET | /auth/perfil | Perfil autenticado |
+
+---
+
+## Flujo de autenticación
+
+1. Registrar usuario
+2. Iniciar sesión
+3. Obtener JWT
+4. Autorizar en Swagger
+5. Consumir endpoints protegidos
+
+---
+
+## Ejemplo de Login
+```
+POST /auth/login
+
+Content-Type: application/x-www-form-urlencoded
+
+username=admin
+password=123456
+```
 
 ---
 
