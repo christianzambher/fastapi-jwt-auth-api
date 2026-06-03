@@ -1,9 +1,15 @@
 import sqlite3
+import os
 from fastapi import HTTPException
 from security import hash_password 
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_DIR = os.path.join(BASE_DIR, 'database')
+DB_PATH = os.path.join(DB_DIR, 'usuarios.db')
+
 def conectar():
-    return sqlite3.connect('database/usuarios.db')
+    os.makedirs(DB_DIR, exist_ok=True)
+    return sqlite3.connect(DB_PATH)
 
 def crear_tabla():
     conexion = conectar()
