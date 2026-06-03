@@ -1,12 +1,11 @@
 from fastapi import APIRouter, Header, Depends, HTTPException
 from auth import crear_token, validar_token
-from fastapi.security import OAuth2PasswordBearer
-from models.login import Login
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from database import obtener_usuario_username
 from security import verify_password
 
 oauth2_scheme = OAuth2PasswordBearer(
-    tokenUrl="login"
+    tokenUrl="/auth/login"
 )
 
 auth_router = APIRouter(
@@ -28,8 +27,8 @@ def obtener_usuario_actual(
     return payload
 
 @auth_router.post("/login")
-def login(datos: Login):
-    usuario = obtener_usuario_username(datos.username)
+def login(form_data: OAuth2PasswordRequestForm = Depends()):
+    usuario = obtener_usuario_username(form_data.username)
 
     if not usuario:
         raise HTTPException(
@@ -37,7 +36,7 @@ def login(datos: Login):
             detail="Credenciales incorrectas"
         )
 
-    if not verify_password(datos.password, usuario[2]):
+    if not verify_password(form_data.password, usuario[2]):
         raise HTTPException(
             status_code=401,
             detail="Credenciales incorrectas"
