@@ -1,9 +1,7 @@
 from fastapi import FastAPI
-
 from routers.auth import auth_router
 from routers.usuarios import router as usuarios_router
-
-from database import crear_tabla, crear_usuario
+from database import crear_tabla
 
 app = FastAPI()
 
