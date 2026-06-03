@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from routers.auth import verificar_admin, obtener_usuario_actual
 from models.usuario import Usuario
 from database import (
@@ -45,8 +45,8 @@ def obtener_usuario(id: int):
         "role": usuario[2]
     }
 
-@router.put("/usuarios/{id}")
-def actualizar_usuario(id: int, usuario: Usuario):
+@router.put("/{id}")
+def actualizar_usuario(id: int, admin=Depends(verificar_admin), usuario: Usuario = Depends()):
     filas = actualizar_usuario_db(id, usuario.username)
 
     if filas == 0:
@@ -59,7 +59,7 @@ def actualizar_usuario(id: int, usuario: Usuario):
         "mensaje": "Usuario actualizado"
     }
 
-@router.delete("/usuarios/{id}")
+@router.delete("/{id}")
 def eliminar_usuario(id: int, admin=Depends(verificar_admin)):
     filas = eliminar_usuario_db(id)
 
